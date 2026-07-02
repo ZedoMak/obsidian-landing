@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Terminal, Copy, Check } from "lucide-react";
 import { AsciiWave } from "./ascii-wave";
@@ -100,10 +101,10 @@ export function Hero() {
             className="bg-foreground hover:bg-foreground/90 text-background px-6 h-11 text-sm font-medium group"
             asChild
           >
-            <a href="https://github.com/ZedoMak/obsidian-agent" target="_blank" rel="noopener noreferrer">
-              View on GitHub
+            <Link href="/docs">
+              Get Started
               <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-0.5" />
-            </a>
+            </Link>
           </Button>
           <Button
             size="lg"
@@ -111,8 +112,8 @@ export function Hero() {
             className="h-11 px-6 text-sm font-medium border-border hover:bg-secondary/50 bg-transparent"
             asChild
           >
-            <a href="https://pypi.org/project/obsidian-agent-cli-app/" target="_blank" rel="noopener noreferrer">
-              PyPI Package
+            <a href="https://github.com/ZedoMak/obsidian-agent" target="_blank" rel="noopener noreferrer">
+              View on GitHub
             </a>
           </Button>
         </div>

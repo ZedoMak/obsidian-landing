@@ -1,23 +1,19 @@
 import { Hero } from "@/components/landing/hero";
-import { Navigation } from "@/components/landing/navigation";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { FeaturesSection } from "@/components/landing/features-section";
-import { HowItWorksSection } from "@/components/landing/how-it-works-section";
-import { CapabilitiesSection } from "@/components/landing/capabilities-section";
-import { GettingStartedSection } from "@/components/landing/getting-started-section";
-import { TroubleshootingSection } from "@/components/landing/troubleshooting-section";
-import { FooterSection } from "@/components/landing/footer-section";
+import { MarketingHowItWorks } from "@/components/landing/marketing-how-it-works";
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen overflow-x-hidden">
-      <Navigation />
-      <Hero />
-      <FeaturesSection />
-      <HowItWorksSection />
-      <CapabilitiesSection />
-      <GettingStartedSection />
-      <TroubleshootingSection />
-      <FooterSection />
-    </main>
+    <>
+      <SiteHeader />
+      <main className="relative min-h-screen overflow-x-hidden">
+        <Hero />
+        <FeaturesSection />
+        <MarketingHowItWorks />
+      </main>
+      <SiteFooter showCta />
+    </>
   );
 }

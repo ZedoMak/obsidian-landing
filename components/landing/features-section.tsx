@@ -236,9 +236,9 @@ export function FeaturesSection() {
                 isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}
             >
-              Anything the underlying obsidian-mcp server exposes — reading, creating,
-              editing, deleting notes; searching; managing tags; finding backlinks.
-              Run <code className="font-mono text-primary">/tools</code> inside a session to see the live list.
+              Search notes, summarize recent writing, fix broken links, manage
+              tags, and edit content — all through natural conversation. The
+              agent chains multiple vault operations when your request needs it.
             </p>
           </div>
           
