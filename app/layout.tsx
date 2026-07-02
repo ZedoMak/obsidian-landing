@@ -20,8 +20,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Obsidian Agent - An Intelligent CLI Obsidian Automation Tool",
-  description: "Transform your work flow with AI-Powered automation",
+  title: "obsidian-agent — Talk to your Obsidian vault",
+  description:
+    "A conversational AI agent for your Obsidian vault. Find notes, summarize, fix broken links, tag things, and edit notes — powered by MCP and OpenRouter.",
 }
 
 export default function RootLayout({
