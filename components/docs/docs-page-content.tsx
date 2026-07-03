@@ -44,9 +44,14 @@ function DocSection({
   children: ReactNode;
 }) {
   return (
-    <section id={id} className="scroll-mt-28 pb-16 border-b border-border last:border-0">
+    <section
+      id={id}
+      className="scroll-mt-28 pb-16 border-b border-border last:border-0"
+    >
       <h2 className="text-2xl font-semibold mb-6">{title}</h2>
-      <div className="space-y-4 text-muted-foreground leading-relaxed">{children}</div>
+      <div className="space-y-4 text-muted-foreground leading-relaxed">
+        {children}
+      </div>
     </section>
   );
 }
@@ -126,6 +131,14 @@ pipx install obsidian-agent-cli-app`}
 
       <DocSection id="usage" title="Usage">
         <div className="space-y-6">
+          <p>
+            <code className="font-mono text-sm text-primary">
+              obsidian-agent
+            </code>{" "}
+            with no arguments starts an interactive chat session. For a single
+            job you don&apos;t need a full conversation for, use one of the
+            one-shot commands below — each runs to completion and exits.
+          </p>
           <div className="rounded-xl border border-border overflow-hidden">
             <table className="w-full text-sm">
               <thead>
@@ -140,13 +153,37 @@ pipx install obsidian-agent-cli-app`}
               </thead>
               <tbody>
                 {[
-                  ["obsidian-agent", "Start chatting with your vault"],
-                  ["obsidian-agent doctor", "Troubleshooting: checks obsidian-mcp and vault access"],
+                  ["obsidian-agent", "Start an interactive chat session"],
+                  [
+                    'obsidian-agent task "..."',
+                    "Run any one-off instruction, then exit",
+                  ],
+                  [
+                    'obsidian-agent search --query "..."',
+                    "Search the vault, then exit",
+                  ],
+                  [
+                    'obsidian-agent summarize --file "..."',
+                    "Summarize a single note, then exit",
+                  ],
+                  [
+                    "obsidian-agent tags --min-usage N",
+                    "List tags used at least N times, then exit",
+                  ],
+                  [
+                    "obsidian-agent doctor",
+                    "Troubleshooting: checks obsidian-mcp and vault access",
+                  ],
                   ["obsidian-agent config", "View current configuration"],
                   ["obsidian-agent config --reset", "Reset all settings"],
                 ].map(([cmd, desc]) => (
-                  <tr key={cmd} className="border-b border-border last:border-0">
-                    <td className="p-4 font-mono text-primary">{cmd}</td>
+                  <tr
+                    key={cmd}
+                    className="border-b border-border last:border-0"
+                  >
+                    <td className="p-4 font-mono text-primary whitespace-nowrap">
+                      {cmd}
+                    </td>
                     <td className="p-4">{desc}</td>
                   </tr>
                 ))}
@@ -158,14 +195,54 @@ pipx install obsidian-agent-cli-app`}
           <CodeBlock
             code={`> What did I write about last week?
 
-Agent: I found 5 notes modified in the last 7 days.
+◆ agent
+I found 5 notes modified in the last 7 days.
 Here's a summary...
 
 > Tag all of those with #weekly-review
 
-Agent: Done. Tagged 5 notes with #weekly-review.`}
+◆ agent
+Done. Tagged 5 notes with #weekly-review.`}
           />
         </div>
+      </DocSection>
+
+      <DocSection id="plans" title="Plans & Safety">
+        <p>
+          Anything that runs with{" "}
+          <code className="font-mono text-sm text-primary">
+            obsidian-agent task
+          </code>{" "}
+          and would change files in your vault doesn&apos;t touch anything right
+          away. The agent investigates read-only first, then shows you a plan
+          before executing it:
+        </p>
+        <CodeBlock
+          code={`❯ obsidian-agent task "reorganize my Machine Learning folder into subfolders by topic"
+
+  ╭─ proposed plan ──────────────────────────────────╮
+  │ 1. Move Model.md and DataSets.md into             │
+  │    Machine Learning/Fundamentals/                 │
+  │ 2. Create Machine Learning/Linear Regression/     │
+  │    and move the 3 related notes there             │
+  │ 3. Tag all moved notes with #ml                   │
+  ╰────────────────────────────────────────────────────╯
+  Proceed with this plan? [y/N]`}
+        />
+        <p>
+          Nothing happens until you type{" "}
+          <code className="font-mono text-sm text-foreground">y</code>. If you
+          trust a task and want it to run without stopping for confirmation,
+          pass <code className="font-mono text-sm text-primary">--yes</code> (or{" "}
+          <code className="font-mono text-sm text-primary">-y</code>) — worth
+          using with care on anything destructive.
+        </p>
+        <p>
+          Under the hood, individual operations time out after 30 seconds rather
+          than hanging indefinitely, and the agent won&apos;t repeatedly retry
+          an identical failing call — it&apos;s told to try something else or
+          skip ahead instead.
+        </p>
       </DocSection>
 
       <DocSection id="session-commands" title="Session Commands">
@@ -207,6 +284,7 @@ Agent: Done. Tagged 5 notes with #weekly-review.`}
         </p>
         <ul className="list-disc pl-5 space-y-2">
           <li>Reading, creating, editing, and deleting notes</li>
+          <li>Moving and renaming notes and folders</li>
           <li>Searching by text, tag, date, or regex</li>
           <li>Managing tags</li>
           <li>Finding backlinks and broken links</li>
@@ -214,11 +292,12 @@ Agent: Done. Tagged 5 notes with #weekly-review.`}
           <li>Chaining multiple steps together for complex requests</li>
         </ul>
         <p>
-          Run{" "}
-          <code className="font-mono text-sm text-primary">/tools</code> inside
-          a session to see the live list for your installed version. The agent
-          always reads a note before editing it — it won&apos;t blindly
-          overwrite content.
+          Run <code className="font-mono text-sm text-primary">/tools</code>{" "}
+          inside a session to see the live list for your installed version. The
+          agent always reads a note before editing it, trusts the result of a
+          successful operation instead of re-checking it obsessively, and
+          won&apos;t improvise a workaround (like silently recreating a note)
+          when something doesn&apos;t go as expected.
         </p>
       </DocSection>
 
@@ -279,6 +358,17 @@ export AGENT_MODEL="anthropic/claude-3.5-sonnet"`}
           </div>
           <div>
             <h3 className="text-lg font-medium text-foreground mb-2">
+              A task times out or seems stuck
+            </h3>
+            <p>
+              Individual tool calls are capped at 30 seconds, so a stuck
+              operation reports a timeout instead of hanging forever. If a task
+              genuinely touches a lot of notes, it&apos;s normal for it to take
+              a while — you&apos;ll see each tool call as it happens.
+            </p>
+          </div>
+          <div>
+            <h3 className="text-lg font-medium text-foreground mb-2">
               Something else broke
             </h3>
             <p>
@@ -292,7 +382,9 @@ export AGENT_MODEL="anthropic/claude-3.5-sonnet"`}
               </code>
               ) because of real breaking changes upstream. If you&apos;re
               hacking on the source directly rather than using{" "}
-              <code className="font-mono text-sm text-foreground">pip install</code>
+              <code className="font-mono text-sm text-foreground">
+                pip install
+              </code>
               , don&apos;t loosen those pins without checking{" "}
               <code className="font-mono text-sm text-foreground">
                 obsidian-agent doctor
@@ -332,7 +424,9 @@ export AGENT_MODEL="anthropic/claude-3.5-sonnet"`}
         <p className="text-sm text-muted-foreground mb-4">
           Ready to install? Copy the command below:
         </p>
-        <code className="font-mono text-sm text-foreground">{INSTALL_COMMAND}</code>
+        <code className="font-mono text-sm text-foreground">
+          {INSTALL_COMMAND}
+        </code>
       </div>
     </div>
   );
