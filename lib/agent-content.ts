@@ -1,4 +1,4 @@
-export const AGENT_VERSION = "0.1.0";
+export const AGENT_VERSION = "0.2.0";
 
 export const AGENT_PACKAGE = "obsidian-agent-cli-app";
 
@@ -14,8 +14,25 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "0.2.0",
+    date: "2026-07-03",
+    summary: "One-shot commands, safety guardrails, and a full UI overhaul.",
+    features: [
+      "New one-shot commands: obsidian-agent task, summarize, search, tags — run a single job and exit, no chat session needed",
+      "Plan-before-execute safety gate: tasks that modify your vault now investigate read-only first, show a numbered plan, and wait for confirmation before touching any files",
+      "--yes/-y flag to skip confirmation for trusted automated runs",
+      "Tool call timeout (30s) — a slow or stuck operation now fails gracefully instead of hanging the agent indefinitely",
+      "Repeated-call detection — the agent no longer loops on the same failing tool call; it's told to try something else or move on",
+      "System prompt hardened against destructive guesswork: no more re-creating or overwriting notes to 'fix' an uncertain result",
+      "Full visual overhaul: colored banner, live thinking spinner, markdown-rendered replies, and a cleaner turn-by-turn layout",
+      "Redirected the underlying MCP server's internal logs away from the terminal, so output stays clean during long sessions",
+      "Multi-step tasks now get a much larger step budget for complex jobs like reorganizing entire folders",
+      "Migrated CLI framework to Typer for clearer --help output and command structure",
+    ],
+  },
+  {
     version: "0.1.0",
-    date: "2026-03-01",
+    date: "2026-07-01",
     summary: "Initial public release of obsidian-agent.",
     features: [
       "Conversational AI agent for your local Obsidian vault",
