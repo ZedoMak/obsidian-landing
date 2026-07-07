@@ -5,7 +5,7 @@ import { GeistPixelLine } from "geist/font/pixel";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import Script from "next/script";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -32,20 +32,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={cn("dark", "font-sans", geist.variable)}>
-      <Script
-        async
-        src="https://www.googletagmanager.com/gtag/js?id=G-79R55PPLB0"
-      ></Script>
-      <Script>
-        window.dataLayer = window.dataLayer || []; function gtag()
-        {dataLayer.push(arguments)}
-        gtag('js', new Date()); gtag('config', 'G-79R55PPLB0');
-      </Script>
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} ${GeistPixelLine.variable} font-sans antialiased`}
       >
         {children}
         <Analytics />
+        <GoogleAnalytics gaId="G-79R55PPLB0" />
       </body>
     </html>
   );
